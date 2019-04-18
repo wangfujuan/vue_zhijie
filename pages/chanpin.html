@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>产品</title>
+    <link href="../css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="../css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="../css/animate.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/mystyle.css" rel="stylesheet">
+    <script src="../js/vue.js"></script>
+	<script src="../js/vue-resource-1.3.4.js"></script>
+</head>
+
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
+	<div id="app">
+	    <div id="wrapper">
+	        <!--左侧导航开始-->
+	        <nav class="navbar-default navbar-static-side" role="navigation">
+	            <div class="nav-close"><i class="fa fa-times-circle"></i>
+	            </div>
+	            <div class="sidebar-collapse">
+	                <ul class="nav" id="side-menu">
+	                    <li class="nav-header">
+	                        <div class="dropdown profile-element">
+	                            <span><img alt="image" class="img-circle" src="../images/a3.jpg" /></span>
+	                            <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+	                                <span class="clear">
+		                               	<span class="block m-t-xs"><strong class="font-bold">Jared Kin</strong></span>
+		                                <span class="text-muted text-xs block">超级管理员<b class="caret"></b></span>
+	                                </span>
+	                            </a>  
+	                        </div>
+	                    </li>
+	                    <li>
+	                        <a href="chanpin.html">
+	                            <i class="fa fa-soccer-ball-o"></i>
+	                            <span class="nav-label">产品管理</span>
+	                            <span class="fa fa-angle-right"></span>
+	                        </a>
+	                    </li>
+	                    <li>
+	                        <a class="J_menuItem" href="shebei.html">
+	                        	<i class="fa fa-suitcase"></i> 
+	                        	<span class="nav-label">设备管理</span>
+	                        	<span class="fa fa-angle-right"></span>
+	                        </a>
+	                    </li>
+	                </ul>
+	            </div>
+	        </nav>
+	        <!--左侧导航结束-->
+	        <!--右侧部分开始-->
+	        <div id="page-wrapper" class="gray-bg dashbard-1">
+	            <div class="row border-bottom">
+	                <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+	                    <div class="common-tl">Web端管理员页面</div>
+	                </nav>
+	            </div>
+	            <div class="row content-tabs">
+	                <nav class="page-tabs J_menuTabs">
+	                    <div class="page-tabs-content">
+	                        <a href="javascript:;" class="active J_menuTab" data-id="index_v1.html">产品管理</a>
+	                    </div>
+	                </nav>
+	            </div>
+				<div class="my-wrapper animated fadeInRight">
+			        <div class="row">
+			            <div class="col-sm-12">
+			                <div class="ibox float-e-margins">
+			                    <div class="ibox-title">
+			                        <h5>产品列表</h5>                       
+			                    </div>
+			                    <div class="ibox-content">
+			                        <table class="table">
+			                            <thead>
+			                                <tr>
+			                                    <th>产品名称</th>
+			                                    <th>产品标识</th>
+			                                    <th>注册设备数据</th>
+			                                    <!-- <th data-field="Score">操作</th> -->
+			                                </tr>
+			                            </thead>
+			                            <tbody>
+			                            	<tr v-for="item in list" @click="current(item.productKey)" :class="{active: active==item.productKey}">
+			                            		<td>{{item.productName}}</td>
+			                                    <td>{{item.productKey}}</td>
+			                                    <td>{{item.devReg}}</td>
+			                            	</tr>	                            	
+			                            </tbody>
+			                            <!-- <tbody>
+			                                <tr>
+			                                    <td>产品1</td>
+			                                    <td>product1</td>
+			                                    <td>50</td>
+			                                    <td>
+			                                        <span class="label label-primary">启用</span>
+			                                        <span class="label label-danger">禁用</span>
+			                                        <span class="label label-warning">删除</span>
+			                                        <span class="label label-info">查看设备</span>
+			                                    </td>
+			                                </tr>
+			                            </tbody> -->
+			                        </table>
+			                    </div>
+			                </div>
+			            </div>
+			        </div>   
+			        <div class="row">
+			            <div class="col-sm-4">
+			                <div class="ibox float-e-margins">
+			                    <div class="ibox-title">
+			                        <h5>设备总数</h5>
+			                    </div>
+			                    <div class="ibox-content">
+			                        <h1 class="sum-center">{{currentItem.devTotal}}（台）</h1> 
+			                    </div>
+			                </div>
+			            </div>
+			            <div class="col-sm-4">
+			                <div class="ibox float-e-margins">
+			                    <div class="ibox-title">
+			                        <h5>在线设备</h5>
+			                    </div>
+			                    <div class="ibox-content">
+			                        <h1 class="sum-center">{{currentItem.devOnLine}}（台）</h1>  
+			                    </div>
+			                </div>
+			            </div>
+			            <div class="col-sm-4">
+			                <div class="ibox float-e-margins">
+			                    <div class="ibox-title">
+			                        <h5>离线设备</h5>
+			                    </div>
+			                    <div class="ibox-content">
+			                        <h1 class="sum-center">{{currentItem.devOffLine}}（台）</h1> 
+			                    </div>
+			                </div>
+			            </div>
+			        </div>    
+			    </div>
+	        </div>
+	        <!--右侧部分结束-->
+	    </div>
+
+    </div>
+    <script>
+    	var app = new Vue({
+		  el: '#app',
+		  data: {
+		  	list: [],
+		  	currentItem: {},
+		  	active: ''
+		  },
+		  methods: {
+		  	getList(){
+		  		this.$http.post('http://iot.liyy.ink:83/iot/product/list', {}, {}).then(res => {
+					if(res.body.code == '1000'){
+						var list = res.body.data
+						this.list = list;
+						this.active = list[0].productKey;
+						this.currentItem = list[0];
+					}
+				});
+		  	},
+		  	current(key){
+		  		this.active = key;
+		  		this.list.forEach(item => {
+		  			if(item.productKey == key){
+		  				this.currentItem = item;
+		  			}
+		  		})
+		  	}
+		  },
+		  created(){
+			this.getList();	
+		  }
+		})
+    </script>
+</body>
+
+</html>

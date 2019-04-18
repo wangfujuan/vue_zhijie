@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>设备</title>
+    <link href="../css/bootstrap.min.css?v=3.3.6" rel="stylesheet">
+    <link href="../css/font-awesome.min.css?v=4.4.0" rel="stylesheet">
+    <link href="../css/animate.css" rel="stylesheet">
+    <link href="../css/style.css" rel="stylesheet">
+    <link href="../css/mystyle.css" rel="stylesheet">
+    <script src="../js/vue.js"></script>
+    <script src="../js/vue-resource-1.3.4.js"></script>
+</head>
+
+<body class="fixed-sidebar full-height-layout gray-bg" style="overflow:hidden">
+    <div id="app">
+        <div id="wrapper">
+            <!--左侧导航开始-->
+            <nav class="navbar-default navbar-static-side" role="navigation">
+                <div class="nav-close"><i class="fa fa-times-circle"></i>
+                </div>
+                <div class="sidebar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="nav-header">
+                            <div class="dropdown profile-element">
+                                <span><img alt="image" class="img-circle" src="../images/a3.jpg" /></span>
+                                <a data-toggle="dropdown" class="dropdown-toggle" href="#">
+                                    <span class="clear">
+                                        <span class="block m-t-xs"><strong class="font-bold">Jared Kin</strong></span>
+                                        <span class="text-muted text-xs block">超级管理员<b class="caret"></b></span>
+                                    </span>
+                                </a>  
+                            </div>
+                        </li>
+                        <li>
+                            <a href="chanpin.html">
+                                <i class="fa fa-soccer-ball-o"></i>
+                                <span class="nav-label">产品管理</span>
+                                <span class="fa fa-angle-right"></span>
+                            </a>
+                        </li>
+                        <li>
+                            <a class="J_menuItem" href="shebei.html">
+                                <i class="fa fa-suitcase"></i> 
+                                <span class="nav-label">设备管理</span>
+                                <span class="fa fa-angle-right"></span>
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+            <!--左侧导航结束-->
+            <!--右侧部分开始-->
+            <div id="page-wrapper" class="gray-bg dashbard-1">
+                <div class="row border-bottom">
+                    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
+                        <div class="common-tl">Web端管理员页面</div>
+                    </nav>
+                </div>
+                <div class="row content-tabs">
+                    <nav class="page-tabs J_menuTabs">
+                        <div class="page-tabs-content">
+                            <a href="javascript:;" class="active J_menuTab" data-id="index_v1.html">设备管理</a>
+                        </div>
+                    </nav>
+                </div>
+                <div class="my-wrapper animated fadeInRight">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>设备列表</h5>                       
+                                </div>
+                                <div class="ibox-content">
+                                    <div class="row">
+                                        <div class="col-sm-4 m-b-xs">
+                                            <div class="selectbox">
+                                                <div class="meselect" @click="ctrlSelect">{{selectedOption.productName}}</div>
+                                                <div class="selectls" v-if="isShow">
+                                                    <div class="selectitem" @click="selectChange(product)" v-for="product in productList">{{product.productName}}</div>
+                                                </div>
+                                            </div>
+                                            <!--  <select class="input-sm form-control input-s-sm inline" v-model="selectedOption">
+                                                <option @click="selectChange(product.productKey)" v-for="product in productList" :value="product">{{product.productName}}</option>
+                                            </select> -->
+                                        </div>
+                                        <div class="col-sm-4 m-b-xs">
+                                            <div class="flexcenter">
+                                                <div class="form-group">自动刷新状态</div>
+                                                <div class="form-group">
+                                                    <div class="switch">
+                                                        <div class="onoffswitch">
+                                                            <input type="checkbox" @click="switchChange" class="onoffswitch-checkbox" id="switch">
+                                                            <label class="onoffswitch-label" for="switch">
+                                                                <span class="onoffswitch-inner"></span>
+                                                                <span class="onoffswitch-switch"></span>
+                                                            </label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-sm-4">
+                                            <div class="input-group">
+                                                <input type="text" v-model="keyword" placeholder="请输入设备编号" class="input-sm form-control"> 
+                                                <span class="input-group-btn">
+                                                    <button type="button" class="btn btn-sm btn-primary"> 查询设备</button> 
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>设备编号</th>
+                                                <th>开机时间</th>
+                                                <th>最后一次更新时间</th>
+                                                <th>当前状态</th>
+                                                <th>操作</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- @click="getRecordList(item.id)" -->
+                                            <tr v-for="(item,index) in search(keyword)" :class="{active: active==item.deviceName}">
+                                                <td @click="current(item.deviceName)">{{item.deviceName}}</td>
+                                                <td @click="current(item.deviceName)">{{item.firstOnlineTime}}</td>
+                                                <td @click="current(item.deviceName)">{{item.lastUpdateTime}}</td>
+                                                <td @click="current(item.deviceName)">
+                                                    <span v-if="item.status==0">离线</span>
+                                                    <span v-if="item.status==1">工作中</span>
+                                                    <span v-if="item.status==2">空闲待机</span>
+                                                </td>
+                                                <td>
+                                                    <span class="label label-primary">启用</span>
+                                                    <span class="label label-danger">禁用</span>
+                                                    <span class="label label-warning">删除</span>
+                                                    <span class="label label-info" @click="current(item.deviceName)">查看设备</span>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <!-- <nav aria-label="Page navigation">
+                                        <ul class="pagination">
+                                            <li>
+                                                <a href="#" aria-label="Previous">
+                                                    <span aria-hidden="true">&laquo;</span>
+                                                </a>
+                                            </li>
+                                            <li><a href="#">1</a></li>
+                                            <li><a href="#">2</a></li>
+                                            <li><a href="#">3</a></li>
+                                            <li><a href="#">4</a></li>
+                                            <li><a href="#">5</a></li>
+                                            <li>
+                                                <a href="#" aria-label="Next">
+                                                    <span aria-hidden="true">&raquo;</span>
+                                                </a>
+                                            </li>
+                                        </ul>
+                                    </nav> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>   
+                    <div class="row" v-if="recordList.length>0">
+                        <div class="col-sm-12 scrollbox">
+                            <div class="ibox float-e-margins">
+                                <div class="ibox-title">
+                                    <h5>运行记录</h5>  
+                                    <div class="ibox-tools">
+                                        <span class="close-link">
+                                            设备编号：{{active}}
+                                        </span>
+                                    </div>                     
+                                </div>
+                                <div class="ibox-content">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>序号</th>
+                                                <th>开始运行时间</th>
+                                                <th>持续时间</th>
+                                                <th>结束原因</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr v-for="(item, index) in recordList">
+                                                <td>{{index+1}}</td>
+                                                <td>{{item.beginTime}}</td>
+                                                <td>{{item.duration}}</td>
+                                                <td>{{item.depict}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>    
+                </div>
+            </div>
+            <!--右侧部分结束-->
+        </div>
+    </div>
+    <script>
+        var app = new Vue({
+          el: '#app',
+          data: {
+            productList: [],
+            list: [],
+            recordList: [],
+            keyword: '',
+            checked: false,
+            t: null,
+            active: '',
+            selectedOption: {},
+            isShow: false
+          },
+          methods: {
+            getRecordList(name){
+                this.$http.post('http://iot.liyy.ink:83/iot/device/record', {"deviceName": name}, {}).then(res => {
+                    if(res.body.code == '1000'){
+                        this.recordList = res.body.data
+                        // console.log(res.body.data);
+                    }
+                });
+            },
+            getProductList(){
+                this.$http.post('http://iot.liyy.ink:83/iot/product/list', {}, {}).then(res => {
+                    if(res.body.code == '1000'){
+                        var productList = res.body.data
+                        this.productList = productList;
+                        this.selectedOption = productList[0];
+
+                        // console.log(res.body.data);
+
+                    }
+                });
+            },
+            getList(productKey, deviceName){
+                // "deviceName": deviceName,"productKey": productKey
+                this.$http.post('http://iot.liyy.ink:83/iot/device/list', {}, {}).then(res => {
+                    console.log(res.body.data[0].devList);
+                    if(res.body.code == '1000'){
+                        var devList = res.body.data[0].devList;
+                        this.list = devList;
+                        this.active = devList[0].deviceName;
+                        this.getRecordList(this.active);
+                    }
+                });
+            },
+            search(keyword) {
+                return this.list.filter(item => {
+                    if(item.deviceName.includes(keyword)){
+                        return item;
+                    }
+                })
+            },
+            switchChange(e){
+                // console.log(e.target.checked);
+                this.checked = e.target.checked;
+                if(this.t){
+                    clearInterval(this.t);
+                }else{
+                    this.t = setInterval(()=>{this.getList()},6000); 
+                }
+            },
+            current(name){
+                this.active = name;
+                // console.log(name);
+                this.getRecordList(name);
+            },
+            ctrlSelect(){
+                this.isShow = true;
+            },
+            selectChange(item){
+                // console.log(item);
+                this.isShow = false;
+                this.selectedOption = item;
+                this.getList(item.productKey, item.deviceName);
+            }
+          },
+          created(){
+            this.getProductList();
+            this.getList(); 
+          }
+        })
+    </script>
+
+</body>
+
+</html>
